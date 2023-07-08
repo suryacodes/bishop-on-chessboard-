@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        background-color: antiquewhite;
+      }
+      #board {
+        display: grid;
+        grid-template-rows: repeat(8, 100px);
+        grid-template-columns: repeat(8, 100px);
+      }
+      .black {
+        background-color: black;
+      }
+      .white {
+        background-color: white;
+      }
+      .selected {
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="board"></div>
+    </div>
+
+    <script>
+      const board = document.getElementById("board");
+      const cells = [];
+      for (let i = 0; i < 8; i++) {
+        const row = [];
+        for (let j = 0; j < 8; j++) {
+          const cell = document.createElement("div");
+          cell.id = `${i},${j}`;
+          cell.classList.add(j % 2 === i % 2 ? "black" : "white");
+          row.push(cell);
+          board.appendChild(cell);
+        }
+        cells.push(row);
+      }
+
+      board.addEventListener("click", (e) => {
+        const selectedCells = board.getElementsByClassName("selected");
+        while (selectedCells.length > 0) {
+          selectedCells[0].classList.remove("selected");
+        }
+
+        const [x, y] = e.target.id.split(",").map(Number);
+
+        for (let i = 0; i < 8; i++) {
+          const cell1 = cells[x - i]?.[y - i];
+          const cell2 = cells[x + i]?.[y + i];
+          const cell3 = cells[x - i]?.[y + i];
+          const cell4 = cells[x + i]?.[y - i];
+          // Queen
+          // const cell5 = cells[x - i]?.[y];
+          // const cell6 = cells[x + i]?.[y];
+          // const cell7 = cells[x]?.[y - i];
+          // const cell8 = cells[x]?.[y + i];
+
+          if (cell1) cell1.classList.add("selected");
+          if (cell2) cell2.classList.add("selected");
+          if (cell3) cell3.classList.add("selected");
+          if (cell4) cell4.classList.add("selected");
+
+          // if (cell5) cell5.classList.add("selected");
+          // if (cell6) cell6.classList.add("selected");
+          // if (cell7) cell7.classList.add("selected");
+          // if (cell8) cell8.classList.add("selected");
+        }
+      });
+    </script>
+  </body>
+</html>
